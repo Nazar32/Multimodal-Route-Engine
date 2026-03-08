@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мультимодальні маршрути — Авто та Залізниця</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>Мультимодальні маршрути</h1>
+      <p class="subtitle">Автомобільні та залізничні шляхи — єдина точка пошуку</p>
+    </header>
+
+    <main class="main">
+      <section class="search-section">
+        <div class="form-row">
+          <div class="field">
+            <label for="departure">Місце відправлення</label>
+            <select id="departure" required>
+              <option value="">Оберіть місто...</option>
+            </select>
+          </div>
+          <div class="swap-btn" id="swap" title="Поміняти місцями">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 16V4M7 4L3 8M7 4L11 8M17 8V20M17 20L21 16M17 20L13 16"/>
+            </svg>
+          </div>
+          <div class="field">
+            <label for="arrival">Місце прибуття</label>
+            <select id="arrival" required>
+              <option value="">Оберіть місто...</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn-search" id="search">Знайти маршрути</button>
+      </section>
+
+      <section class="results-section" id="results" hidden>
+        <h2>Знайдені маршрути</h2>
+        <p class="route-summary" id="route-summary"></p>
+        <div class="routes-list" id="routes-list"></div>
+      </section>
+
+      <section class="empty-state" id="empty-state">
+        <div class="empty-icon">🚂</div>
+        <p>Оберіть місце відправлення та прибуття, натисніть «Знайти маршрути»</p>
+      </section>
+
+      <section class="loading" id="loading" hidden>
+        <div class="spinner"></div>
+        <p>Пошук маршрутів...</p>
+      </section>
+
+      <section class="error" id="error" hidden>
+        <p id="error-message"></p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Курс «Гетерогенні розподілені бази даних» — Бригада 1</p>
+    </footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN pip install --no-cache-dir neo4j
+
+COPY scripts/ ./scripts/
+
+WORKDIR /app/scripts
+ENV PYTHONPATH=/app/scripts
+
+CMD ["python", "seed_all.py"]

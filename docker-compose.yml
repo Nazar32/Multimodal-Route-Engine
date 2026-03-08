@@ -1,0 +1,77 @@
+name: multimodal-routes
+
+services:
+  neo4j:
+    image: neo4j:5-community
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: neo4j/password
+    volumes:
+      - neo4j_data:/data
+
+  memgraph:
+    image: memgraph/memgraph-platform:latest
+    ports:
+      - "7688:7687"
+    volumes:
+      - memgraph_data:/var/lib/memgraph
+
+  seed:
+    build:
+      context: .
+      dockerfile: Dockerfile.seed
+    environment:
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: password
+      MEMGRAPH_URI: bolt://memgraph:7687
+      SEED_DB: ${SEED_DB:-}
+    depends_on:
+      - neo4j
+      - memgraph
+    restart: "no"
+
+  aggregator:
+    build:
+      context: .
+      dockerfile: Dockerfile.aggregator
+    ports:
+      - "8080:8080"
+    environment:
+      ROAD_SERVICE_URL: http://road-service:8001
+      RAILWAY_SERVICE_URL: http://railway-service:8002
+    depends_on:
+      - road-service
+      - railway-service
+
+  road-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.road
+    ports:
+      - "8001:8001"
+    environment:
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: password
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+
+  railway-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.railway
+    ports:
+      - "8002:8002"
+    environment:
+      MEMGRAPH_URI: bolt://memgraph:7687
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+
+volumes:
+  neo4j_data:
+  memgraph_data:
