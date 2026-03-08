@@ -52,7 +52,7 @@ cd backend/aggregator && uvicorn main:app --reload --port 8080
 ## Запуск через Docker
 
 ```bash
-docker compose up --build -d
+DOCKER_BUILDKIT=0 docker compose up --build -d
 # Seed запускається автоматично, road/railway сервіси чекають на його завершення
 ```
 
